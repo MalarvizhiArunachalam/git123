@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Todo List — Simple App</title>
+  <style>
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:#f8fafc;color:#0f172a;margin:2rem}
+    .card{background:#fff;padding:1.25rem;border-radius:8px;max-width:720px;margin:0 auto;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    h1{margin:.25rem 0}
+    form{display:flex;gap:.5rem;margin:1rem 0}
+    input[type="text"]{flex:1;padding:.5rem;border-radius:6px;border:1px solid #e6e9ef}
+    button{padding:.5rem .75rem;border-radius:6px;border:none;background:#2563eb;color:white;cursor:pointer}
+    ul{list-style:none;padding:0;margin:0}
+    li{display:flex;align-items:center;gap:.75rem;padding:.5rem;border-bottom:1px solid #f1f5f9}
+    li.completed label{text-decoration:line-through;color:#94a3b8}
+    .meta{margin-top:.75rem;color:#64748b;font-size:.9rem}
+    .actions{margin-top:.75rem;display:flex;gap:.5rem}
+    a.back{display:inline-block;margin-top:1rem;color:#2563eb;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Todo</h1>
+    <p>A tiny client-side todo list that saves to localStorage.</p>
+
+    <form id="addForm" aria-label="Add todo">
+      <input id="taskInput" type="text" placeholder="Add a new task" autocomplete="off">
+      <button id="addBtn" type="submit">Add</button>
+    </form>
+
+    <ul id="list" aria-live="polite"></ul>
+
+    <div class="actions">
+      <button id="clearCompleted">Clear completed</button>
+      <button id="clearAll">Clear all</button>
+    </div>
+
+    <div class="meta">Remaining: <span id="remaining">0</span></div>
+
+    <a class="back" href="index.html">← Back to home</a>
+  </main>
+
+  <script>
+    // Simple Todo app with localStorage persistence
+    const STORAGE_KEY = 'malargit_todos_v1';
+    const listEl = document.getElementById('list');
+    const input = document.getElementById('taskInput');
+    const addForm = document.getElementById('addForm');
+    const remainingEl = document.getElementById('remaining');
+
+    let todos = [];
+
+    function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(todos)); }
+    function load(){
+      try{ todos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }catch(e){ todos = []; }
+    }
+
+    function render(){
+      listEl.innerHTML = '';
+      todos.forEach((t, i)=>{
+        const li = document.createElement('li');
+        li.className = t.done ? 'completed' : '';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = t.done;
+        checkbox.addEventListener('change', ()=>{ t.done = checkbox.checked; save(); render(); });
+
+        const label = document.createElement('label');
+        label.textContent = t.text;
+
+        const del = document.createElement('button');
+        del.textContent = 'Delete';
+        del.style.marginLeft = 'auto';
+        del.addEventListener('click', ()=>{ todos.splice(i,1); save(); render(); });
+
+        li.appendChild(checkbox);
+        li.appendChild(label);
+        li.appendChild(del);
+        listEl.appendChild(li);
+      });
+      const remaining = todos.filter(t=>!t.done).length;
+      remainingEl.textContent = remaining;
+    }
+
+    addForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const text = input.value.trim();
+      if(!text) return;
+      todos.push({ text, done:false });
+      input.value = '';
+      save(); render();
+      input.focus();
+    });
+
+    document.getElementById('clearCompleted').addEventListener('click', ()=>{
+      todos = todos.filter(t=>!t.done); save(); render();
+    });
+
+    document.getElementById('clearAll').addEventListener('click', ()=>{
+      if(!confirm('Clear ALL tasks?')) return; todos = []; save(); render();
+    });
+
+    // init
+    load(); render();
+  </script>
+</body>
+</html>
