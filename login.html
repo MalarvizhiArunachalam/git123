@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login — Demo</title>
+  <style>
+    :root{--bg:#f3f4f6;--card:#ffffff;--accent:#2563eb;--muted:#6b7280}
+    html,body{height:100%}
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:var(--bg);margin:0;display:flex;align-items:center;justify-content:center;padding:2rem}
+    .card{background:var(--card);width:100%;max-width:420px;border-radius:12px;padding:1.5rem;box-shadow:0 10px 30px rgba(2,6,23,0.08)}
+    h1{margin:0 0 .25rem;font-size:1.25rem}
+    p.lead{margin:.25rem 0 .75rem;color:var(--muted);font-size:.95rem}
+    form{display:grid;gap:.75rem}
+    label{font-size:.9rem;color:#0f172a}
+    input[type="email"],input[type="password"]{width:100%;padding:.6rem .75rem;border-radius:8px;border:1px solid #e6edf3;font-size:1rem}
+    .row{display:flex;align-items:center;gap:.5rem}
+    .actions{display:flex;align-items:center;justify-content:space-between;margin-top:.5rem}
+    button{background:var(--accent);color:#fff;border:none;padding:.6rem .85rem;border-radius:8px;cursor:pointer}
+    .muted{color:var(--muted);font-size:.9rem}
+    .error{color:#b91c1c;font-size:.9rem}
+    .small{font-size:.9rem}
+    .back{display:inline-block;margin-top:1rem;color:var(--accent);text-decoration:none}
+    .pw-toggle{background:transparent;border:0;color:var(--accent);cursor:pointer;font-size:.9rem}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Sign in</h1>
+    <p class="lead">Enter your email and password to sign in (demo page — no real authentication).</p>
+
+    <form id="loginForm" novalidate>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" inputmode="email" placeholder="you@example.com" required>
+        <div id="emailErr" class="error" aria-live="polite"></div>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <div class="row">
+          <input id="password" name="password" type="password" placeholder="At least 6 characters" required>
+          <button type="button" class="pw-toggle" id="togglePw">Show</button>
+        </div>
+        <div id="pwErr" class="error" aria-live="polite"></div>
+      </div>
+
+      <div class="row actions">
+        <label class="small"><input id="remember" type="checkbox"> Remember me</label>
+        <button id="submitBtn" type="submit">Sign in</button>
+      </div>
+    </form>
+
+    <p class="muted">This page is a static demo; credentials are not sent anywhere.</p>
+
+    <a class="back" href="index.html">← Back to home</a>
+  </main>
+
+  <script>
+    // Simple client-side validation and demo submit
+    const form = document.getElementById('loginForm');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const emailErr = document.getElementById('emailErr');
+    const pwErr = document.getElementById('pwErr');
+    const toggle = document.getElementById('togglePw');
+
+    toggle.addEventListener('click', ()=>{
+      const isPw = password.type === 'password';
+      password.type = isPw ? 'text' : 'password';
+      toggle.textContent = isPw ? 'Hide' : 'Show';
+    });
+
+    function validateEmail(v){
+      // simple email pattern
+      return /\S+@\S+\.\S+/.test(v);
+    }
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      emailErr.textContent = '';
+      pwErr.textContent = '';
+      let ok = true;
+      if(!email.value.trim()){ emailErr.textContent = 'Email is required'; ok = false; }
+      else if(!validateEmail(email.value)){ emailErr.textContent = 'Enter a valid email address'; ok = false; }
+      if(!password.value){ pwErr.textContent = 'Password is required'; ok = false; }
+      else if(password.value.length < 6){ pwErr.textContent = 'Password must be at least 6 characters'; ok = false; }
+
+      if(!ok) return;
+
+      // Demo: persist 'remember me' choice and show a success message
+      if(document.getElementById('remember').checked){
+        localStorage.setItem('malargit_demo_email', email.value);
+      } else {
+        localStorage.removeItem('malargit_demo_email');
+      }
+
+      // Simulate successful login (demo)
+      alert('Signed in (demo) — email: ' + email.value);
+      // Optionally redirect or clear form
+      // location.href = 'index.html';
+    });
+
+n    // Pre-fill email if remembered
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const remembered = localStorage.getItem('malargit_demo_email');
+      if(remembered){ document.getElementById('email').value = remembered; document.getElementById('remember').checked = true; }
+    });
+  </script>
+</body>
+</html>
