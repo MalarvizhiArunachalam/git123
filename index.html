@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Basic HTML Page</title>
+  <style>
+    :root { --bg:#f7fafc; --card:#fff; --accent:#2563eb; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); color:#111827; margin:0; padding:2rem; }
+    .card { background:var(--card); border-radius:8px; box-shadow:0 6px 18px rgba(15,23,42,0.06); padding:1.5rem; max-width:900px; margin:0 auto; }
+    header h1 { margin:0 0 .25rem 0; font-size:1.5rem; }
+    p.lead { color:var(--muted); margin-top:0.5rem; }
+    footer { margin-top:1.25rem; font-size:.9rem; color:var(--muted); }
+    a.button { display:inline-block; margin-top:1rem; padding:.5rem .75rem; background:var(--accent); color:white; border-radius:6px; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>Welcome to your basic HTML page</h1>
+      <p class="lead">This is a minimal starter page with simple styling and a small script example.</p>
+    </header>
+
+    <section>
+      <p id="greeting">Loading greeting...</p>
+      <a class="button" href="#" id="timeBtn">Show current time</a>
+    </section>
+
+    <footer>
+      <small>Created on: <span id="createdDate"></span></small>
+    </footer>
+  </main>
+
+  <script>
+    // Small interactive script: shows a greeting and lets user display current time.
+    document.getElementById('createdDate').textContent = new Date().toLocaleDateString();
+    document.getElementById('greeting').textContent = 'Hello — this page is ready. Click the button to show the current time.';
+
+    document.getElementById('timeBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      const now = new Date();
+      alert('Current time: ' + now.toLocaleTimeString());
+    });
+  </script>
+</body>
+</html>
