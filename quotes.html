@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quotes — Simple Demo</title>
+  <style>
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:#f8fafc;color:#0f172a;margin:2rem}
+    .card{background:#fff;padding:1.25rem;border-radius:8px;max-width:680px;margin:0 auto;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    blockquote{font-size:1.25rem;margin:1rem 0;padding-left:1rem;border-left:4px solid #c7d2fe;color:#334155}
+    button{padding:.5rem .75rem;border-radius:6px;border:1px solid #e5e7eb;background:#7c3aed;color:#fff;cursor:pointer}
+    a.back{display:inline-block;margin-top:1rem;color:#7c3aed;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Random Quotes</h1>
+    <p>Click the button to show a new quote.</p>
+    <blockquote id="quote">"Loading..."</blockquote>
+    <div>
+      <button id="nextBtn">Next Quote</button>
+    </div>
+    <a class="back" href="index.html">← Back to home</a>
+  </main>
+
+  <script>
+    const quotes = [
+      'The only way to do great work is to love what you do. — Steve Jobs',
+      'Simplicity is the ultimate sophistication. — Leonardo da Vinci',
+      'Strive not to be a success, but rather to be of value. — Albert Einstein',
+      'In the middle of difficulty lies opportunity. — Albert Einstein',
+      'Well done is better than well said. — Benjamin Franklin'
+    ];
+    const qEl = document.getElementById('quote');
+    const nextBtn = document.getElementById('nextBtn');
+    function showRandom(){ qEl.textContent = '"' + quotes[Math.floor(Math.random()*quotes.length)] + '"'; }
+    nextBtn.addEventListener('click', showRandom);
+    // initial
+    showRandom();
+  </script>
+</body>
+</html>
