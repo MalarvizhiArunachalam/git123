@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Color Switcher — Simple Demo</title>
+  <style>
+    :root{--bg:#f8fafc;--card:#fff;--accent:#10b981}
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:var(--bg);color:#0f172a;margin:2rem}
+    .card{background:var(--card);padding:1.25rem;border-radius:8px;max-width:720px;margin:0 auto;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    .swatches{display:flex;gap:.5rem;margin:1rem 0}
+    .swatch{width:44px;height:44px;border-radius:8px;border:2px solid #fff;box-shadow:0 2px 6px rgba(2,6,23,.08);cursor:pointer}
+    a.back{display:inline-block;margin-top:1rem;color:var(--accent);text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Color Switcher</h1>
+    <p>Click a swatch to change the page background color.</p>
+    <div class="swatches">
+      <div class="swatch" data-color="#f8fafc" style="background:#f8fafc"></div>
+      <div class="swatch" data-color="#fff7ed" style="background:#fff7ed"></div>
+      <div class="swatch" data-color="#ecfeff" style="background:#ecfeff"></div>
+      <div class="swatch" data-color="#fef3c7" style="background:#fef3c7"></div>
+      <div class="swatch" data-color="#eef2ff" style="background:#eef2ff"></div>
+    </div>
+    <button id="randomBtn">Random Color</button>
+    <a class="back" href="index.html">← Back to home</a>
+  </main>
+
+  <script>
+    const swatches = document.querySelectorAll('.swatch');
+    swatches.forEach(s=> s.addEventListener('click', ()=> document.body.style.background = s.dataset.color));
+    document.getElementById('randomBtn').addEventListener('click', ()=>{
+      const rnd = Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+      document.body.style.background = '#' + rnd;
+    });
+  </script>
+</body>
+</html>
